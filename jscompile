@@ -1,3 +1,3 @@
 #!/bin/sh
 
-hastec --out=app/js/controller.js '--start=%%(); jsmain();' --with-js='app/hask/lib.js,app/hask/controller-skel.js' --debug app/hask/aghast.hs
+hastec --out=app/js/controllers.js '--start=%%(); jsmain();' --with-js='app/hask/lib.js,app/hask/controller-skel.js' --debug app/hask/aghast.hs
