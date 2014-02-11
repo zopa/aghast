@@ -5,6 +5,7 @@
 
 module Main where
 
+import Control.Applicative
 import Control.Monad
 import Haste
 import Haste.Foreign
@@ -17,6 +18,7 @@ instance Marshal JSAny where
 
 foreign import ccall jsStrSet :: JSAny -> JSString -> JSString -> IO () 
 foreign import ccall jsObjSet :: JSAny -> JSString -> JSAny -> IO ()
+foreign import ccall jsNumSet :: JSAny -> JSString -> Double -> IO ()
 foreign import ccall jsStrArrayPush :: JSAny -> JSString -> IO () 
 foreign import ccall jsObjArrayPush :: JSAny -> JSAny -> IO () 
 foreign import ccall jsNewArray :: IO JSAny
@@ -45,13 +47,17 @@ strObj assoc = do
     return obj
 
 setPhones :: JSAny -> IO ()
-setPhones scope = 
-    mapM strObj phoneList >>= objArray >>= jsObjSet scope "phones"
+setPhones scope = do
+    phones <- mapM strObj phoneList
+    sequence . getZipList $ flip jsNumSet "age" 
+        <$> ZipList phones <*> ZipList [1,2,3]
+    objArray phones >>= jsObjSet scope "phones"
+    jsStrSet scope "orderProp" "age"
   where
     phoneList =
-        [ [("name", "Nexus S") ,("snippet", "Fast just got faster")]
-        , [("name", "Motorola XOOM") ,("snippet", "Next Generation")]
+        [ [("name", "Nexus S"), ("snippet", "Fast just got faster")]
         , [("name", "Motorola XOOM Wifi"),("snippet", "Next Generation")]
+        , [("name", "Motorola XOOM") ,("snippet", "Next Generation")]
         ]
 
 main = do
