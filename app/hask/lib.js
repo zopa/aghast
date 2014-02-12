@@ -1,15 +1,18 @@
-function jsStrSet(elem, prop, val) {
+function jsObjSet(elem, prop, val) {
     elem[prop] = val;
 }
 
-var jsObjSet = jsStrSet;
-var jsNumSet = jsStrSet;
+var jsStrSet  = jsObjSet;
+var jsNumSet  = jsObjSet;
+var jsBoolSet = jsObjSet;
 
-function jsStrArrayPush(arr, str) {
+function jsObjArrayPush(arr, str) {
     arr.push(str);
 }
 
-var jsObjArrayPush = jsStrArrayPush;
+var jsStrArrayPush  = jsObjArrayPush;
+var jsNumArrayPush  = jsObjArrayPush;
+var jsBoolArrayPush = jsObjArrayPush;
 
 //foreign import ccall jsNewArray :: IO JSAny
 function jsNewArray() {
@@ -21,4 +24,10 @@ function jsNewArray() {
 function jsNewObject() {
     var obj = {};
     return obj;
+}
+
+function jsParseJSON(str) {
+    var arr = [];
+    arr = JSON.parse(str);
+    return arr;
 }

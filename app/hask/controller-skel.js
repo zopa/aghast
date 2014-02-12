@@ -5,7 +5,7 @@ function jsmain() {
 
     var phonecatApp = angular.module('phonecatApp', []);
 
-    phonecatApp.controller('PhoneListCtrl', function ($scope) {
-        Haste['setPhones']($scope); 
+    phonecatApp.controller('PhoneListCtrl', function ($scope, $http) {
+        Haste['setPhones']($scope, $http); 
         });
 }
