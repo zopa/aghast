@@ -13,4 +13,5 @@ site :: Snap ()
 site =
     ifTop (writeBS "Aghast server") <|>
     route [ ("app", serveDirectory "app")
+          , ("phones", serveDirectory "app/phones")
           ]

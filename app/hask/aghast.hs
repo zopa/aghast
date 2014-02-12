@@ -29,6 +29,10 @@ foreign import ccall jsBoolArrayPush :: JSAny -> Bool -> IO ()
 foreign import ccall jsObjArrayPush :: JSAny -> JSAny -> IO () 
 foreign import ccall jsNewArray :: IO JSAny
 foreign import ccall jsNewObject :: IO JSAny
+foreign import ccall jsCallMethod :: JSAny -> JSString -> JSString -> IO JSAny
+foreign import ccall jsCallCBMethod :: JSAny -> JSString -> JSFun a -> IO JSAny
+
+foreign import ccall jsSetFun :: JSAny -> JSString -> JSFun a -> IO () 
 
 -- Getters, setters, and so on.
 -- These cry out for a type class. The issue is that foreign imported
@@ -117,11 +121,13 @@ assignJSON = \case
 -- wrong with it?
 --------------------------------------------------------------------
 
-
 setPhones :: JSAny -> JSAny -> IO ()
-setPhones scope _ = do
-    jsonRequest_ GET "/phones/phones.json" [] $ maybe (return ())
-        $ assignJSON >=> jsObjSet scope "phones"
+setPhones scope http = do
+    service <- jsCallMethod http "get" "/phones/phones.json"
+  --  test <- strObj [("name", "Andromeda") ,("snippet", "A galaxy") ,("age", "1")]
+    jsCallCBMethod service "success" . mkCallback $ 
+         jsObjSet scope "phones"
+        -- \_ -> jsObjSet scope "phones" =<< objArray [test]
     jsStrSet scope "orderProp" "age"
 
 main = do

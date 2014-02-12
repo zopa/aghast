@@ -31,3 +31,15 @@ function jsParseJSON(str) {
     arr = JSON.parse(str);
     return arr;
 }
+
+function jsCallMethod(obj, meth, arg) {
+    var result = obj[meth](arg);
+    return result;
+}
+
+function jsCallCBMethod(obj, meth, cb) {
+    obj[meth](function (data) {
+        A(cb, [[0,data],0]);
+        });
+}
+
